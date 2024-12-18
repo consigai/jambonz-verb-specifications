@@ -385,6 +385,15 @@ test("validate correct verbs", async (t) => {
     {
       "verb": "config",
       "beep": {
+        "actionHook": "/beepHook",  
+        "options": {
+          "sample_n_continuous_streak": 2,
+        }
+      },
+    },
+    {
+      "verb": "config",
+      "beep": {
         "actionHook": "/beepHook",
         "sticky": true
       },
