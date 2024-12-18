@@ -87,6 +87,10 @@ test("validate correct verbs", async (t) => {
     },
     {
       "verb": "config",
+      "referHook": "https://referhook.com"
+    },
+    {
+      "verb": "config",
       "referHook": {
         "url": "https://referhook.com"
       }
@@ -371,6 +375,12 @@ test("validate correct verbs", async (t) => {
           sampleRate: 8000
        }
       }
+    },
+    {
+      "verb": "config",
+      "beep": {
+        "actionHook": "/beepHook",  
+      },
     },
     {
       "verb": "config",

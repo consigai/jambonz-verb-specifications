@@ -54,6 +54,7 @@
       "listen": "#listenOptions",
       "transcribe": "#transcribeOptions",
       "amd": "#amd",
+      "beep": "#beep",
       "fillerNoise": "#fillerNoise",
       "notifyEvents": "boolean",
       "reset": "string|array",
@@ -1112,6 +1113,14 @@
     },
     "required": [
       "enable"
+    ]
+  },
+  "beep": {
+    "properties": {
+      "actionHook": "object|string"
+    },
+    "required": [
+      "actionHook"
     ]
   },
   "amd": {
