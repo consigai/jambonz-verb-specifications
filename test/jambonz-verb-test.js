@@ -143,6 +143,7 @@ test("validate correct verbs", async (t) => {
       "callerName": "Tom",
       "answerOnBridge": true,
       "dtmfCapture": ["*2", "*3"],
+      "timeLimit": 10,
       "dtmfHook": {
         "url": "/dtmf",
         "method": "GET"
@@ -208,7 +209,8 @@ test("validate correct verbs", async (t) => {
         "hintsBoost": 10,
         "fastRecognitionTimeout": 2000,
         "deepgramOptions": {
-          "endpointing": 500
+          "endpointing": 500,
+          "noDelay": true,
         }
       },
       "say": {
@@ -544,7 +546,8 @@ test("validate correct verbs", async (t) => {
         "actionHook": "/answeringMachineDetection",
     
       },
-      "dual_streams": true
+      "dual_streams": true,
+      "timeLimit" : 10
     }
   ];
   try {

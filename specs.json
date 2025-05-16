@@ -52,6 +52,7 @@
       "ttsStream": "#ttsStream",
       "record": "#recordOptions",
       "listen": "#listenOptions",
+      "stream": "#listenOptions",
       "transcribe": "#transcribeOptions",
       "amd": "#amd",
       "beep": "#beep",
@@ -290,6 +291,7 @@
       "exitMediaPath": "boolean",
       "boostAudioSignal": "number|string",
       "listen": "#listen",
+      "stream": "#listen",
       "target": ["#target"],
       "timeLimit": "number",
       "timeout": "number",
@@ -401,6 +403,34 @@
       "transcribe": "#transcribe",
       "url": "string",
       "wsAuth": "#auth",
+      "earlyMedia": "boolean",
+      "channel": "number"
+    },
+    "required": [
+      "url"
+    ]
+  },
+  "stream": {
+    "properties": {
+      "id": "string",
+      "actionHook": "object|string",
+      "auth": "#auth",
+      "finishOnKey": "string",
+      "maxLength": "number",
+      "metadata": "object",
+      "mixType": {
+        "type": "string",
+        "enum": ["mono", "stereo", "mixed"]
+      },
+      "passDtmf": "boolean",
+      "playBeep": "boolean",
+      "disableBidirectionalAudio": "boolean",
+      "bidirectionalAudio": "#bidirectionalAudio",
+      "sampleRate": "number",
+      "timeout": "number",
+      "transcribe": "#transcribe",
+      "url": "string",
+      "wsAuth": "#auth",
       "earlyMedia": "boolean"
     },
     "required": [
@@ -422,7 +452,6 @@
     },
     "required": [
       "vendor",
-      "model",
       "auth",
       "llmOptions"
     ]
@@ -520,7 +549,8 @@
       "amd": "#amd",
       "dual_streams": "boolean",
       "sipRequestWithinDialogHook": "string",
-      "referHook": "object|string"
+      "referHook": "object|string",
+      "timeLimit": "number"
     },
     "required": [
       "call_hook",
@@ -703,7 +733,8 @@
       "googleOptions": "#googleOptions",
       "customOptions": "#customOptions",
       "verbioOptions": "#verbioOptions",
-      "speechmaticsOptions": "#speechmaticsOptions"
+      "speechmaticsOptions": "#speechmaticsOptions",
+      "openaiOptions": "#openaiOptions"
     },
     "required": [
       "vendor"
@@ -751,6 +782,14 @@
         "enum": [
           "AtStart",
           "Continuous"
+        ]
+      },
+      "speechRecognitionMode": {
+        "type": "string",
+        "enum": [
+          "CONVERSATION",
+          "DICTATION",
+          "INTERACTIVE"
         ]
       }
     },
@@ -826,6 +865,7 @@
       "version": "string",
       "punctuate": "boolean",
       "smartFormatting": "boolean",
+      "noDelay": "boolean",
       "profanityFilter": "boolean",
       "redact": {
         "type": "string",
@@ -845,11 +885,13 @@
       "search": "array",
       "replace": "array",
       "keywords": "array",
+      "keyterms": "array",
       "endpointing": "boolean | number",
       "utteranceEndMs": "number",
       "shortUtterance": "boolean",
       "vadTurnoff": "number",
-      "tag": "string"
+      "tag": "string",
+      "fillerWords" : "boolean"
     }
   },
   "sonioxOptions": {
@@ -880,6 +922,60 @@
     "required": [
     ]
   },
+  "openaiOptions": {
+    "properties": {
+      "apiKey": "string",
+      "model": "string",
+      "prompt": "string",
+      "promptTemplates": "#promptTemplates",
+      "language": "string",
+      "input_audio_noise_reduction": {
+        "type": "string",
+        "enum": [
+          "near_field",
+          "far_field"
+        ]
+      },
+      "turn_detection": "#turnDetection"
+    },
+    "required": [
+    ]
+  },
+  "promptTemplates": {
+    "properties": {
+      "hintsTemplate": "string",
+      "conversationHistoryTemplate": "string"
+    },
+    "required": [
+    ]
+  },
+  "turnDetection": {
+    "properties": {
+      "type": {
+        "type": "string",
+        "enum": [
+          "none",
+          "server_vad",
+          "semantic_vad"
+        ]
+      },
+      "eagerness": {
+        "type": "string",
+        "enum": [
+          "low",
+          "medium",
+          "high",
+          "auto"
+        ]
+      },
+      "threshold": "number",
+      "prefix_padding_ms": "number",
+      "silence_duration_ms": "number"
+    },
+    "required": [
+      "type"
+    ]
+  },
   "speechmaticsOptions": {
     "properties": {
       "transcription_config": "#sm_transcriptionConfig",
@@ -892,6 +988,7 @@
   "sm_transcriptionConfig": {
     "properties": {
       "language": "string",
+      "domain": "string",
       "additional_vocab": "array",
       "diarization": "string",
       "speaker_diarization_config": "#sm_speakerDiarizationConfig",
@@ -1129,6 +1226,7 @@
     "properties": {
       "actionHook": "object|string",
       "thresholdWordCount": "number",
+      "digitCount": "number",
       "timers": "#amdTimers",
       "recognizer": "#recognizer"
     },
