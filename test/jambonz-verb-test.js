@@ -227,6 +227,10 @@ test("validate correct verbs", async (t) => {
       },
       "say": {
         "text": "To speak to Sales press 1 or say Sales.  To speak to customer support press 2 or say Support",
+        "instructions": "Voice: High-energy, upbeat, and encouraging, projecting enthusiasm and motivation."
+      },
+      "say": {
+        "text": "To speak to Sales press 1 or say Sales.  To speak to customer support press 2 or say Support",
         "synthesizer": {
           "vendor": "google",
           "language": "en-US",
@@ -548,6 +552,26 @@ test("validate correct verbs", async (t) => {
       },
       "dual_streams": true,
       "timeLimit" : 10
+    },
+    {
+      "verb": "llm",
+      "vendor": 'ultravox',
+      "model": 'fixie-ai/ultravox',
+      "auth": {
+        "apiKey": "sk-1234567890abcdefg"
+      },
+      "llmOptions": {
+        "firstSpeaker": 'FIRST_SPEAKER_AGENT',
+      },
+      "mcpServers": [
+        {
+          "url": 'https://mcp.example.com',
+          "auth": {
+            "username": 'username',
+            "password": 'password'
+          }
+        }
+      ]
     }
   ];
   try {
