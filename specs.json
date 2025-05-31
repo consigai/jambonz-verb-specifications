@@ -1226,13 +1226,12 @@
   },
   "beep": {
     "properties": {
+      "enable": "boolean",
       "actionHook": "object|string",
       "sticky": "boolean",
       "options": "object"
     },
-    "required": [
-      "actionHook"
-    ]
+    "required": []
   },
   "amd": {
     "properties": {
