@@ -72,12 +72,18 @@ test("validate correct verbs", async (t) => {
     },
     {
       "verb": "config",
+      "notifySttLatency": true,
       "recognizer": {
         "vendor": "google",
         "language": "de-DE",
         "label": "label1",
         "assemblyAiOptions": {
-          "apiKey": "apikey"
+          "apiKey": "apikey",
+          "serviceVersion": "v3",
+          "formatTurns": true,
+          "endOfTurnConfidenceThreshold": 0.5,
+          "minEndOfTurnSilenceWhenConfident": 500,
+          "maxTurnSilence": 2000
         }
       }
     },
@@ -211,6 +217,10 @@ test("validate correct verbs", async (t) => {
         "deepgramOptions": {
           "endpointing": 500,
           "noDelay": true,
+          preflightThreshold: 1000,
+          eotThreshold: 500,
+          eotTimeoutMs: 5000,
+          mipOptOut: true
         }
       },
       "say": {
@@ -406,12 +416,19 @@ test("validate correct verbs", async (t) => {
     },
     {
       "verb": "config",
+      "autoStreamTts": true
+    },
+    {
+      "verb": "config",
       "vad": {
         "enable": true,
         "voiceMs": 250,
         "silenceMs": 150,
         "strategy": "one-shot",
-        "mode": 2
+        "mode": 2,
+        "vendor": "webrtc",
+        "threshold": 0.5,
+        "speechPadMs": 1000
       }
     },
     {

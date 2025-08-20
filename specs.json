@@ -1,4 +1,28 @@
 {
+  "pipeline": {
+    "properties": {
+      "id": "string",
+      "stt": "#recognizer",
+      "tts": "#synthesizer",
+      "vad": "#vad",
+      "llm": "#llm",
+      "preflightLlm": "boolean",
+      "actionHook": "object|string"
+    },
+    "required": [
+      "stt",
+      "tts"
+    ]
+  },
+  "alert" : {
+    "properties": {
+      "id": "string",
+      "message": "string"
+    },
+    "required": [
+      "message"
+    ]
+  },
   "answer": {
     "properties": {
       "id": "string"
@@ -58,6 +82,7 @@
       "beep": "#beep",
       "fillerNoise": "#fillerNoise",
       "notifyEvents": "boolean",
+      "notifySttLatency": "boolean",
       "reset": "string|array",
       "onHoldMusic": "string",
       "actionHookDelayAction": "#actionHookDelayAction",
@@ -65,7 +90,8 @@
       "boostAudioSignal": "number|string",
       "vad":"#vad",
       "referHook": "object|string",
-      "earlyMedia": "boolean"
+      "earlyMedia": "boolean",
+      "autoStreamTts": "boolean"
     },
     "required": []
   },
@@ -300,7 +326,8 @@
       "transcribe": "#transcribe",
       "amd": "#amd",
       "dub": ["#dub"],
-      "tag": "object"
+      "tag": "object",
+      "forwardPAI": "boolean"
     },
     "required": [
       "target"
@@ -589,7 +616,6 @@
       "channel": "number"
     },
     "required": [
-      "transcriptionHook"
     ]
   },
   "target": {
@@ -903,7 +929,12 @@
       "shortUtterance": "boolean",
       "vadTurnoff": "number",
       "tag": "string",
-      "fillerWords" : "boolean"
+      "fillerWords" : "boolean",
+      "preflightThreshold": "number",
+      "eotThreshold": "number",
+      "eotTimeoutMs": "number",
+      "mipOptOut": "boolean",
+      "entityPrompt": "string"
     }
   },
   "sonioxOptions": {
@@ -1137,7 +1168,18 @@
   },
   "assemblyAiOptions": {
     "properties": {
-      "apiKey": "string"
+      "apiKey": "string",
+      "serviceVersion": {
+        "type": "string",
+        "enum": [
+          "v2",
+          "v3"
+        ]
+      },
+      "formatTurns": "boolean",
+      "endOfTurnConfidenceThreshold": "number",
+      "minEndOfTurnSilenceWhenConfident": "number",
+      "maxTurnSilence": "number"
     }
   },
   "resource": {
@@ -1218,10 +1260,18 @@
       "voiceMs": "number",
       "silenceMs": "number",
       "strategy": "string",
-      "mode": "number"
+      "mode": "number",
+      "vendor": {
+        "type": "string",
+        "enum": [
+          "webrtc",
+          "silero"
+        ]
+      },
+      "threshold": "number",
+      "speechPadMs": "number"
     },
     "required": [
-      "enable"
     ]
   },
   "beep": {
