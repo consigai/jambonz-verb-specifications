@@ -1,4 +1,13 @@
 {
+  "alert" : {
+    "properties": {
+      "id": "string",
+      "message": "string"
+    },
+    "required": [
+      "message"
+    ]
+  },
   "answer": {
     "properties": {
       "id": "string"
@@ -58,6 +67,7 @@
       "beep": "#beep",
       "fillerNoise": "#fillerNoise",
       "notifyEvents": "boolean",
+      "notifySttLatency": "boolean",
       "reset": "string|array",
       "onHoldMusic": "string",
       "actionHookDelayAction": "#actionHookDelayAction",
@@ -65,7 +75,9 @@
       "boostAudioSignal": "number|string",
       "vad":"#vad",
       "referHook": "object|string",
-      "earlyMedia": "boolean"
+      "earlyMedia": "boolean",
+      "autoStreamTts": "boolean",
+      "disableTtsCache": "boolean"
     },
     "required": []
   },
@@ -268,7 +280,8 @@
       "statusEvents": "array",
       "statusHook": "object|string",
       "enterHook": "object|string",
-      "record": "#record"
+      "record": "#record",
+      "distributeDtmf": "boolean"
     },
     "required": [
       "name"
@@ -300,7 +313,8 @@
       "transcribe": "#transcribe",
       "amd": "#amd",
       "dub": ["#dub"],
-      "tag": "object"
+      "tag": "object",
+      "forwardPAI": "boolean"
     },
     "required": [
       "target"
@@ -454,7 +468,6 @@
     },
     "required": [
       "vendor",
-      "auth",
       "llmOptions"
     ]
   },
@@ -589,7 +602,6 @@
       "channel": "number"
     },
     "required": [
-      "transcriptionHook"
     ]
   },
   "target": {
@@ -746,7 +758,10 @@
       "customOptions": "#customOptions",
       "verbioOptions": "#verbioOptions",
       "speechmaticsOptions": "#speechmaticsOptions",
-      "openaiOptions": "#openaiOptions"
+      "openaiOptions": "#openaiOptions",
+      "houndifyOptions": "#houndifyOptions",
+      "gladiaOptions": "object",
+      "elevenlabsOptions": "#elevenlabsOptions"
     },
     "required": [
       "vendor"
@@ -789,6 +804,7 @@
     "properties": {
       "speechSegmentationSilenceTimeoutMs": "number",
       "postProcessing" : "string",
+      "audioLogging" : "boolean",
       "languageIdMode": {
         "type": "string",
         "enum": [
@@ -822,6 +838,61 @@
       "speechEndTimeoutMs": "number",
       "enableVoiceActivityEvents": "boolean",
       "transcriptNormalization": "array"
+    }
+  },
+  "houndifyOptions": {
+    "properties": {
+      "requestInfo": "object",
+      "sampleRate": "number",
+      "latitude": "number",
+      "longitude": "number",
+      "city": "string",
+      "state": "string",
+      "country": "string",
+      "timeZone": "string",
+      "domain": "string",
+      "audioEndpoint": "string",
+      "maxSilenceSeconds": "number",
+      "maxSilenceAfterFullQuerySeconds": "number",
+      "maxSilenceAfterPartialQuerySeconds": "number",
+      "vadSensitivity": "number",
+      "vadTimeout": "number",
+      "vadMode": "string",
+      "vadVoiceMs": "number",
+      "vadSilenceMs": "number",
+      "vadDebug": "boolean",
+      "audioFormat": "string",
+      "enableNoiseReduction": "boolean",
+      "enableProfanityFilter": "boolean",
+      "enablePunctuation": "boolean",
+      "enableCapitalization": "boolean",
+      "confidenceThreshold": "number",
+      "enableDisfluencyFilter": "boolean",
+      "maxResults": "number",
+      "enableWordTimestamps": "boolean",
+      "maxAlternatives": "number",
+      "partialTranscriptInterval": "number",
+      "sessionTimeout": "number",
+      "connectionTimeout": "number",
+      "customVocabulary": "array",
+      "languageModel": "string"
+    }
+  },
+  "elevenlabsOptions": {
+    "properties": {
+      "includeTimestamps": "boolean",
+      "commitStrategy": {
+        "type": "string",
+        "enum": [
+          "manual",
+          "vad"
+        ]
+      },
+      "vadSilenceThresholdSecs": "number",
+      "vadThreshold": "number",
+      "minSpeechDurationMs": "number",
+      "minSilenceDurationMs": "number",
+      "enableLogging": "boolean"
     }
   },
   "cobaltOptions": {
@@ -903,7 +974,12 @@
       "shortUtterance": "boolean",
       "vadTurnoff": "number",
       "tag": "string",
-      "fillerWords" : "boolean"
+      "fillerWords" : "boolean",
+      "eotThreshold": "number",
+      "eotTimeoutMs": "number",
+      "mipOptOut": "boolean",
+      "entityPrompt": "string",
+      "eagerEotThreshold":"number"
     }
   },
   "sonioxOptions": {
@@ -1137,7 +1213,18 @@
   },
   "assemblyAiOptions": {
     "properties": {
-      "apiKey": "string"
+      "apiKey": "string",
+      "serviceVersion": {
+        "type": "string",
+        "enum": [
+          "v2",
+          "v3"
+        ]
+      },
+      "formatTurns": "boolean",
+      "endOfTurnConfidenceThreshold": "number",
+      "minEndOfTurnSilenceWhenConfident": "number",
+      "maxTurnSilence": "number"
     }
   },
   "resource": {
@@ -1218,10 +1305,18 @@
       "voiceMs": "number",
       "silenceMs": "number",
       "strategy": "string",
-      "mode": "number"
+      "mode": "number",
+      "vendor": {
+        "type": "string",
+        "enum": [
+          "webrtc",
+          "silero"
+        ]
+      },
+      "threshold": "number",
+      "speechPadMs": "number"
     },
     "required": [
-      "enable"
     ]
   },
   "beep": {
@@ -1269,5 +1364,36 @@
       "streaming": "boolean",
       "sampleRate": "number"
     }
+  },
+  "pipeline": {
+    "properties": {
+      "id": "string",
+      "stt": "#recognizer",
+      "tts": "#synthesizer",
+      "vad": "#vad",
+      "turnDetection": "#turnDetectionPipeline",
+      "llm": "#llm",
+      "preflightLlm": "boolean",
+      "actionHook": "object|string",
+      "eventHook": "object|string"
+    },
+    "required": [
+      "stt",
+      "llm",
+      "tts"
+    ]
+  },
+  "turnDetectionPipeline": {
+    "properties": {
+      "vendor": {
+        "type": "string",
+        "enum": ["krisp"]
+      },
+      "threshold": "number",
+      "eagerEotThreshold": "number"
+    },
+    "required": [
+      "vendor"
+    ]
   }
 }

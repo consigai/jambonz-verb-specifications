@@ -72,12 +72,18 @@ test("validate correct verbs", async (t) => {
     },
     {
       "verb": "config",
+      "notifySttLatency": true,
       "recognizer": {
         "vendor": "google",
         "language": "de-DE",
         "label": "label1",
         "assemblyAiOptions": {
-          "apiKey": "apikey"
+          "apiKey": "apikey",
+          "serviceVersion": "v3",
+          "formatTurns": true,
+          "endOfTurnConfidenceThreshold": 0.5,
+          "minEndOfTurnSilenceWhenConfident": 500,
+          "maxTurnSilence": 2000
         }
       }
     },
@@ -211,6 +217,10 @@ test("validate correct verbs", async (t) => {
         "deepgramOptions": {
           "endpointing": 500,
           "noDelay": true,
+          "eotThreshold": 500,
+          "eotTimeoutMs": 5000,
+          "eagerEotThreshold": 200,
+          "mipOptOut": true
         }
       },
       "say": {
@@ -270,6 +280,69 @@ test("validate correct verbs", async (t) => {
           "recognition_timeout": 500,
           "speech_complete_timeout": 500,
           "speech_incomplete_timeout": 500,
+        }
+      },
+    },
+    {
+      "verb": "gather",
+      "actionHook": "http://example.com/collect",
+      "input": ["digits", "speech"],
+      "bargein": true,
+      "dtmfBargein": true,
+      "finishOnKey": "#",
+      "numDigits": 5,
+      "timeout": 8,
+      "recognizer": {
+        "vendor": "houndify",
+        "language": "en-US",
+        "houndifyOptions": {
+          "requestInfo": {
+            "Latitude": 30.6,
+            "Longitude": 30.6,
+            "City": "Huston"
+          },
+          "sampleRate": 16000,
+          "latitude": 30.6,
+          "longitude": 30.6,
+          "city": "Huston",
+          "state": "CA",
+          "country": "US",
+          "timeZone": "GMT",
+          "domain": "Voice",
+          "audioEndpoint": "https://api.houndify.com/v1/audio",
+          "maxSilenceSeconds": 5,
+          "maxSilenceAfterFullQuerySeconds": 3,
+          "maxSilenceAfterPartialQuerySeconds": 2,
+          "vadSensitivity": 0.5,
+          "vadTimeout": 1000,
+          "vadMode": "auto",
+          "vadVoiceMs": 250,
+          "vadSilenceMs": 500,
+          "vadDebug": true,
+          "audioFormat": "PCM16",
+          "enableNoiseReduction": true,
+          "enableProfanityFilter": false,
+          "enablePunctuation": true,
+          "enableCapitalization": true,
+          "confidenceThreshold": 0.7,
+          "enableDisfluencyFilter": true,
+          "maxResults": 5,
+          "enableWordTimestamps": true,
+          "maxAlternatives": 3,
+          "partialTranscriptInterval": 100,
+          "sessionTimeout": 30000,
+          "connectionTimeout": 5000,
+          "customVocabulary": ["jambonz", "telephony", "voip"],
+          "languageModel": "enhanced"
+        },
+        "gladiaOptions": {
+          "post_processing": {
+            "summarization": false,
+            "summarization_config": {
+              "type": "general"
+            },
+            "chapterization": false
+          },
         }
       },
     },
@@ -385,15 +458,15 @@ test("validate correct verbs", async (t) => {
     {
       "verb": "config",
       "beep": {
-        "actionHook": "/beepHook",  
+        "actionHook": "/beepHook"
       },
     },
     {
       "verb": "config",
       "beep": {
-        "actionHook": "/beepHook",  
+        "actionHook": "/beepHook",
         "options": {
-          "sample_n_continuous_streak": 2,
+          "sample_n_continuous_streak": 2
         }
       },
     },
@@ -406,12 +479,19 @@ test("validate correct verbs", async (t) => {
     },
     {
       "verb": "config",
+      "autoStreamTts": true
+    },
+    {
+      "verb": "config",
       "vad": {
         "enable": true,
         "voiceMs": 250,
         "silenceMs": 150,
         "strategy": "one-shot",
-        "mode": 2
+        "mode": 2,
+        "vendor": "webrtc",
+        "threshold": 0.5,
+        "speechPadMs": 1000
       }
     },
     {
@@ -493,6 +573,24 @@ test("validate correct verbs", async (t) => {
         "vendor": "nvidia",
         "language" : "en-US",
         "interim": true
+      }
+    },
+    {
+      "verb": "transcribe",
+      "transcriptionHook": "http://example.com/transcribe",
+      "recognizer": {
+        "vendor": "nvidia",
+        "language" : "en-US",
+        "interim": true,
+        "elevenlabsOptions": {
+          "includeTimestamps": true,
+          "commitStrategy": "vad",
+          "vadSilenceThresholdSecs": 0.8,
+          "vadThreshold": 0.5,
+          "minSpeechDurationMs": 300,
+          "minSilenceDurationMs": 500,
+          "enableLogging": false
+        }
       }
     },
     {
